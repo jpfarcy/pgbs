@@ -25,13 +25,12 @@
 #@JP	        USAGE: source /rootdir/pgbs/lib/libpgbs.sh
 #@JP	  DESCRIPTION: Postgresql Backup Suite Library
 #@JP	               contain functions for pgbs suite scripts.  
-#@JP	
 #@JP	      OPTIONS: ---
 #@JP	 REQUIREMENTS: ---
 #@JP	         BUGS: ---
 #@JP	        NOTES: This script may only work on OS bash is implemented
 #@JP	       AUTHOR: FARCY jean-philippe (), 
-#@JP	         MAIL: 
+#@JP	          WEB: https://github.com/jpfarcy/pgbs 
 #@JP	      VERSION: 1.1
 #@JP	      CREATED: 22/12/2012 10:03:43
 #@JP	     REVISION: 0 
