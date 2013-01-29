@@ -1,7 +1,5 @@
 # PGBS (Postgresql Backup Suite)
-<<<<<<< HEAD
-is a collection of scripts for backuping your Postgres databases.
-=======
+
 is a colection of scripts for backuping your Postgres databases.  
 Nothing very new, this suite is a summary of my Postgres administrator experience.  
 
