@@ -27,7 +27,7 @@ Just dowload the zip file, and use the install.sh inside. Follow the instruction
 
 ## Configuration
 Read the configuration file PGBS_PATH/cfg/pgbackup.config
->>>>>>> readme ok
+
 
 ## Legal
 
