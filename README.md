@@ -26,22 +26,24 @@ This Software handles exports of bases, "Dump all" postgres cluster and On-line 
 
 ## Installation
 Just dowload the zip file, and use the install.sh inside. Follow the instructions.  
-`root@postgres1:# ./install.sh`  
-`===============================================================================`  
-`Postgres Backup Suite Installer (pgbs)`  
-`===============================================================================`  
-`Choose PGBS install directory [/opt/pgbs]:` 
-`User PGBS that scripts run under [root]:postgres`  
-`Choose lang of PGBS default config file [fr]:`  
-`PGBS is Installed` 
-`Enjoy !` 
-
+```bash
+root@postgres1:# ./install.sh  
+===============================================================================  
+            Postgres Backup Suite Installer (pgbs)  
+===============================================================================  
+Choose PGBS install directory [/opt/pgbs]: 
+User PGBS that scripts run under [root]:postgres  
+Choose lang of PGBS default config file [fr]:  
+PGBS is Installed 
+Enjoy ! 
+```
 ## Usage
 By default the config file is /opt/pgbs/cfg/pgbackup.config, otherwise use *-c* option
-`./pgbackup.sh -c  /dir/where/is/your/configfile [t | l]`  
-       `-t | Test your backup config`  
-       `-l | List your backups files`  
-
+```bash
+./pgbackup.sh -c  /dir/where/is/your/configfile [t | l]  
+       -t | Test your backup config  
+       -l | List your backups files  
+```
 ## Configuration
 Read the configuration file PGBS_PATH/cfg/pgbackup.config
 
