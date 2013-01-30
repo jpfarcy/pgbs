@@ -66,8 +66,8 @@ fi
 read -p "Choose lang of PGBS default config file [fr]:" lang
 lang=${lang:=fr}
 # Backup existing conf
-if [[ -L $rootdir/cfg/pgbackup.config]]; then
-	cfgfile=$(ls -l $rootdir/cfg/pgbackup.config|cut -d-> f2)
+if [[ -L $rootdir/cfg/pgbackup.config ]]; then
+	cfgfile=$(ls -l $rootdir/cfg/pgbackup.config|cut -d '>' -f2)
 	mv $rootdir/cfg/$cfgfile $rootdir/cfg/pgbackup.config.bkp
 fi
 # Install
