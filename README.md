@@ -10,6 +10,8 @@ This Software handles exports of bases, "Dump all" postgres cluster and On-line 
 * In the on-line backup PGBS manages the use of tablespsaces.
 * Backup your Postgres config (postgresql.conf, pg_hba.conf)
 * Do vacuum, analyse, reindex
+* list your backups (-l)
+* test your config (-t)
 * use sockdir ou hostname
 * Possibility to appoint the cluster
 * Choose script user, postgres super-user, port, postgres engine path, database path (initdb) etc ...
@@ -23,7 +25,22 @@ This Software handles exports of bases, "Dump all" postgres cluster and On-line 
 * Possibility to set a external command when the script ending whith error
 
 ## Installation
-Just dowload the zip file, and use the install.sh inside. Follow the instructions.
+Just dowload the zip file, and use the install.sh inside. Follow the instructions.  
+`root@postgres1:# ./install.sh`  
+`===============================================================================`  
+`Postgres Backup Suite Installer (pgbs)`  
+`===============================================================================`  
+`Choose PGBS install directory [/opt/pgbs]:` 
+`User PGBS that scripts run under [root]:postgres`  
+`Choose lang of PGBS default config file [fr]:`  
+`PGBS is Installed` 
+`Enjoy !` 
+
+## Usage
+By default the config file is /opt/pgbs/cfg/pgbackup.config, otherwise use *-c* option
+`./pgbackup.sh -c  /dir/where/is/your/configfile [t | l]`  
+       `-t | Test your backup config`  
+       `-l | List your backups files`  
 
 ## Configuration
 Read the configuration file PGBS_PATH/cfg/pgbackup.config
