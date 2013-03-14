@@ -194,7 +194,7 @@ function fConfigTest
 # --- Test Postgresql Connection
 function fTestPgConn
 {
-	echo "\q" | psql -h $PG_SOCKDIR -p $PG_PORT -U $PG_USER > /dev/null 2>&1
+	echo "\q" | $PG_PATH/psql -h $PG_SOCKDIR -p $PG_PORT -U $PG_USER > /dev/null 2>&1
 	if [[ $? -ne 0 ]]; then
 		if [[ $CONFIGTEST -eq 1 ]]; then
 			 PG_CONN="KO"
@@ -404,11 +404,11 @@ function fPgTrt
 		if [[ $PG_ANALYSE == "yes" ]]; then
 			OPTS="$OPTS -z"
 		fi
-		fExecute "vacuumdb $OPTS -h ${PG_SOCKDIR} -p ${PG_PORT} -U $PG_USER"
+		fExecute "$PG_PATH/vacuumdb $OPTS -h ${PG_SOCKDIR} -p ${PG_PORT} -U $PG_USER"
 		[[ $? -ne 0 ]] && fPrintErr "$PG_CLUSTER: LE VACCUM A ECHOUE."
 	fi
 	if [[ $PG_REINDEX == "yes" ]]; then
-		fExecute "reindexdb -a -h ${PG_SOCKDIR} -p ${PG_PORT} -U $PG_USER"
+		fExecute "$PG_PATH/reindexdb -a -h ${PG_SOCKDIR} -p ${PG_PORT} -U $PG_USER"
 		[[ $? -ne 0 ]] && fPrintErr "$PG_CLUSTER: LE REINDEXDB A ECHOUE."
 	fi
 }
