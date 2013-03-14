@@ -301,17 +301,17 @@ function fExport
 function fExportAll
 {
 	fPrintOk "${PG_CLUSTER}: DumpAll"
-	OPTS="${BACKUPS_NOOWNER}"
+	OPTS_EA="${BACKUPS_NOOWNER}"
 	if [[ $COMPRESS == "no" ]]; then 
-		OPTS="$OPTS"
+		OPTS_EA="$OPTS_EA"
 		FILEEXT="sql"
 	else
-		OPTS="$OPTS | $COMPRESS_BIN"
+		OPTS_EA="$OPTS_EA | $COMPRESS_BIN"
 		FILEEXT="sql.gz"
 	fi
 	
 	# --- Dumpall cluster
-	fExecute "${CMD_PG_DUMPALL} --clean --oids $OPTS > ${PG_EXPORT}/pg_dumpall-${PG_CLUSTER}_${BACKUPS_DATE_FORMAT}.${FILEEXT}.in_progress"
+	fExecute "${CMD_PG_DUMPALL} --clean --oids $OPTS_EA > ${PG_EXPORT}/pg_dumpall-${PG_CLUSTER}_${BACKUPS_DATE_FORMAT}.${FILEEXT}.in_progress"
 	[[ $? == 0 ]] ||  fPrintErrExit "${PG_CLUSTER}: EXPORT ALL FAILED ${PG_EXPORT}/pg_dumpall-${PG_CLUSTER}_${BACKUPS_DATE_FORMAT}.${FILEEXT}.in_progress"
 	mv ${PG_EXPORT}/pg_dumpall-${PG_CLUSTER}_${BACKUPS_DATE_FORMAT}.${FILEEXT}.in_progress ${PG_EXPORT}/pg_dumpall-${PG_CLUSTER}_${BACKUPS_DATE_FORMAT}.${FILEEXT}
 	fPrintOk "INFO : ${PG_CLUSTER}: EXPORT ALL DONE"
@@ -397,14 +397,14 @@ function fPgTrt
 {
 	
 	if [[ $PG_VACUUM == "yes" ]]; then
-		OPTS="-a"
+		OPTS_TRT="-a"
 		if [[ $PG_VACUUM == "full" ]]; then
-			OPTS="$OPTS -f"
+			OPTS_TRT="$OPTS_TRT -f"
 		fi 
 		if [[ $PG_ANALYSE == "yes" ]]; then
-			OPTS="$OPTS -z"
+			OPTS_TRT="$OPTS_TRT -z"
 		fi
-		fExecute "$PG_PATH/vacuumdb $OPTS -h ${PG_SOCKDIR} -p ${PG_PORT} -U $PG_USER"
+		fExecute "$PG_PATH/vacuumdb $OPTS_TRT -h ${PG_SOCKDIR} -p ${PG_PORT} -U $PG_USER"
 		[[ $? -ne 0 ]] && fPrintErr "$PG_CLUSTER: LE VACCUM A ECHOUE."
 	fi
 	if [[ $PG_REINDEX == "yes" ]]; then
