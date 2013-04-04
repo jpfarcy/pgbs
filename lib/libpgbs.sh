@@ -499,7 +499,7 @@ function fPrint
 	echo -e "+---------------------+\n| $( date '+%Y/%m/%d %H:%M:%S' ) |\n+---------------------+\n$s_OUTPUT" | tee -a  ${PGBS_LOGFILE}
 
 	if [[ $i_MAIL -eq 1 ]] ; then
-		echo "$i_MAIL" | mail ${PGBS_MAIL}
+		echo "$s_OUTPUT" | mail ${PGBS_MAIL}
 	fi
 
 	if [[ ${i_EXIT} -eq 1 ]] ; then
