@@ -31,7 +31,7 @@
 #@JP	        NOTES: This script may only work on OS bash is implemented
 #@JP	       AUTHOR: FARCY jean-philippe (), 
 #@JP	          WEB: https://github.com/jpfarcy/pgbs 
-#@JP	      VERSION: 1.1
+#@JP	      VERSION: 1.3
 #@JP	      CREATED: 22/12/2012 10:03:43
 #@JP	     REVISION: 0 
 #@JP	===============================================================================
@@ -136,6 +136,7 @@ function fInitVar
 	# ----------------------------
 	#  Others Parameters
 	# ----------------------------
+	: ${PGBS_MAIL:=no}
 	: ${EXT_CMD:=no}
 
 } # END fInitVar
@@ -320,14 +321,14 @@ function fExportAll
 function fBkpConf
 {
 	if [[ $COMPRESS == "no" ]]; then 
-		OPTS="$OPTS"
+		OPTS_CONF="$OPTS_CONF"
 		FILEEXT="sql"
 	else
-		OPTS="$OPTS | $COMPRESS_BIN"
+		OPTS_CONF="$OPTS_CONF | $COMPRESS_BIN"
 		FILEEXT="sql.gz"
 	fi
 	# --- Dumpall globals only
-	fExecute "${CMD_PG_DUMPALL} --globals-only --clean --oids $OPTS > ${BACKUPS_DIR_CONF}/pg_dumpall-${PG_CLUSTER}_globals-only_${BACKUPS_DATE_FORMAT}.${FILEEXT}.in_progress"
+	fExecute "${CMD_PG_DUMPALL} --globals-only --clean --oids $OPTS_CONF > ${BACKUPS_DIR_CONF}/pg_dumpall-${PG_CLUSTER}_globals-only_${BACKUPS_DATE_FORMAT}.${FILEEXT}.in_progress"
 	[[ $? == 0 ]] ||  fPrintErr "${PG_CLUSTER}: EXPORT ALL FAILED ${BACKUPS_DIR_CONF}/pg_dumpall-${PG_CLUSTER}_globals-only_${BACKUPS_DATE_FORMAT}.${FILEEXT}.in_progress"
 	mv ${BACKUPS_DIR_CONF}/pg_dumpall-${PG_CLUSTER}_globals-only_${BACKUPS_DATE_FORMAT}.${FILEEXT}.in_progress ${BACKUPS_DIR_CONF}/pg_dumpall-${PG_CLUSTER}_globals-only_${BACKUPS_DATE_FORMAT}.${FILEEXT}
 	fPrintOk "INFO : ${PG_CLUSTER}: EXPORT ALL 'globals-only' DONE"
@@ -456,6 +457,12 @@ function fBackupList
 	fi
 }
 
+# --- Send Mail
+function fMailLog
+{
+	cat $1 | mail -s "$PGBS_MAIL_SUB" $PGBS_MAIL_ADR
+}
+
 # -----------------------------------------
 # Print and Log Functions
 # -----------------------------------------
@@ -463,10 +470,10 @@ function fBackupList
 # Description of Print and Log Functions
 # -----------------------------------------
 #
-#        |   print   |      Mail     |            Exit                 |
-# -------|-----------|-------------------------------------------------|
-# info   | fPrintOk  | fPrintOkMail  | fPrintOkExit fPrintOkMailExit   |
-# erreur | fPrintErr | fPrintErrMail | fPrintErrExit fPrintErrMailExit |
+#        |   print   |     Exit      |
+# -------|-----------|---------------|
+# info   | fPrintOk  | fPrintOkExit  |
+# erreur | fPrintErr | fPrintErrExit |
 #
 function fPrint
 {
@@ -491,16 +498,8 @@ function fPrint
 	if [[ "$FONCTION" =~ "Exit" ]] ; then
 		i_EXIT=1
 	fi
-	
-	if [[ "$FONCTION" =~ "Mail" ]] ; then
-		i_MAIL=1
-	fi
-	
+		
 	echo -e "+---------------------+\n| $( date '+%Y/%m/%d %H:%M:%S' ) |\n+---------------------+\n$s_OUTPUT" | tee -a  ${PGBS_LOGFILE}
-
-	if [[ $i_MAIL -eq 1 ]] ; then
-		echo "$s_OUTPUT" | mail ${PGBS_MAIL}
-	fi
 
 	if [[ ${i_EXIT} -eq 1 ]] ; then
 		exit ${i_RC}
@@ -517,14 +516,6 @@ function fPrintOkExit
 {
 	fPrint "$FUNCNAME" "$@"
 }
-function fPrintOkMail
-{
-	fPrint "$FUNCNAME" "$@"
-}
-function fPrintOkMailExit
-{
-	fPrint "$FUNCNAME" "$@"
-}
 
 # --- fPrintErr ---
 function fPrintErr
@@ -532,14 +523,6 @@ function fPrintErr
 	fPrint "$FUNCNAME" "$@"
 }
 function fPrintErrExit
-{
-	fPrint "$FUNCNAME" "$@"
-}
-function fPrintErrMail
-{
-	fPrint "$FUNCNAME" "$@"
-}
-function fPrintErrMailExit
 {
 	fPrint "$FUNCNAME" "$@"
 }
@@ -554,10 +537,10 @@ function fPrintErrMailExit
 # Description of Execute Functions
 # -----------------------------------------
 #
-#        | fExecute | fExecuteMail | fExecuteExit fExecuteMailExit |
-# -------|-------------|-------------------------------------------------------|
-# info   | fPrintOk    | fPrintOkMail    | fPrintOkExit fPrintOkMailExit       |
-# erreur | fPrintErr   | fPrintErrMail   | fPrintErrExit fPrintErrMailExit     |
+#        | fExecute   | fExecuteExit  |
+# -------|----------------------------|
+# info   | fPrintOk   | fPrintOkExit  |
+# erreur | fPrintErr  | fPrintErrExit |
 #
 function fExecuteCommand
 { 
@@ -586,14 +569,6 @@ function fExecute
 	fExecuteCommand "$FUNCNAME" "$@"
 }
 function fExecuteExit 
-{
-	fExecuteCommand "$FUNCNAME" "$@"
-}
-function fExecuteMail
-{
-	fExecuteCommand "$FUNCNAME" "$@"
-}
-function fExecuteMailExit
 {
 	fExecuteCommand "$FUNCNAME" "$@"
 }
