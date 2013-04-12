@@ -134,14 +134,14 @@ if [[ $BACKUPS_TYPE_CONF == "yes" ]]; then
 fi
 # END
 if grep "ERREUR" $PGBS_LOGFILE; then
-    [[ $EXT_CMD == "yes" ]] && $EXT_CMD_Err
+    [[ $EXT_CMD == "yes" ]] && fExecute "EXT_CMD_Err"
     fPrintErr "===============================================================================
                 !! ERROR !!  Backups finished with error
 ==============================================================================="
     [[ "$PGBS_MAIL" == "yes" ]] && fMailLog "$PGBS_LOGFILE"
     exit 1
 else
-    [[ $EXT_CMD == "yes" ]] && $EXT_CMD_Ok
+    [[ $EXT_CMD == "yes" ]] && fExecute "EXT_CMD_Ok"
     fPrintOk "===============================================================================
                  Backups finished without error
 ==============================================================================="
