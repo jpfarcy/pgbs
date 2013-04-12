@@ -31,7 +31,7 @@
 #@JP	        NOTES: This script may only work on OS bash is implemented
 #@JP	       AUTHOR: FARCY jean-philippe (), 
 #@JP	          WEB: https://github.com/jpfarcy/pgbs 
-#@JP	      VERSION: 1.3
+#@JP	      VERSION: 1.5
 #@JP	      CREATED: 22/12/2012 10:03:43
 #@JP	     REVISION: 0 
 #@JP	===============================================================================
