@@ -249,7 +249,7 @@ function fGetDbList
 	if [[ "${PG_DB_LISTE}" == "" ]] ; then
 		# recherche la liste des bases a sauvegarder = toutes sauf postgres et template
 		PG_DB_LISTE=`echo "SELECT datname FROM pg_stat_database WHERE datname != 'postgres' AND datname NOT LIKE 'template%';" \
-		  | psql -h ${PG_SOCKDIR} -p ${PG_PORT} --pset tuples_only 2>/dev/null \
+		  | ${CMD_PSQL} -h ${PG_SOCKDIR} -p ${PG_PORT} --pset tuples_only 2>/dev/null \
 		  | perl -p -e 's/\n//'`
 	fi
 }
@@ -258,7 +258,7 @@ function fGetDbList
 function fGetTbList
 {
     PG_TB_LISTE=`echo "SELECT spcname from pg_tablespace WHERE spcname != 'pg_default' AND spcname != 'pg_global';" \
-            | psql -h ${PG_SOCKDIR} -p ${PG_PORT} --pset tuples_only 2>/dev/null \
+            | ${CMD_PSQL} -h ${PG_SOCKDIR} -p ${PG_PORT} --pset tuples_only 2>/dev/null \
             | perl -p -e 's/\n//'`
 }
 
