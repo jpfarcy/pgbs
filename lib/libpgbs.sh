@@ -359,9 +359,23 @@ function fTarCluster
 	if [[ PG_TB_LISTE ]]; then
 		for S_TB in ${PG_TB_LISTE}; do
 			OUTB="${PG_TAR_OUT}/pg_tar-${PG_CLUSTER}_${BACKUPS_DATE_FORMAT}_${S_TB}.tar.gz"
-			INTB=`echo "SELECT spclocation from pg_tablespace WHERE spcname = '${S_TB}';" \
+			# spclocation was remove from pg 9.2 replace by pg_tablespace_location()
+			PGVER=9.2
+			VER=`psql -V |perl -p -e 's/psql \(PostgreSQL\)\s(.*)/$1/'`
+			fversionCompare $VER $PGVER
+			if [[ $? != '>' ]]
+    		then
+    		    OID=`echo "SELECT oid from pg_tablespace WHERE spcname = '${S_TB}';" \
 				| $CMD_PSQL --pset tuples_only \
 					| perl -p -e 's/\n//'`
+    		    INTB=`echo "SELECT pg_tablespace_location($OID);" \
+				| $CMD_PSQL --pset tuples_only \
+					| perl -p -e 's/\n//'`
+    		else
+    		    INTB=`echo "SELECT spclocation from pg_tablespace WHERE spcname = '${S_TB}';" \
+				| $CMD_PSQL --pset tuples_only \
+					| perl -p -e 's/\n//'`
+    		fi
 			fExecute "tar cfz $OUTB.in_progress $INTB"
 			RET=$?
 			[[ $RET -eq 2 ]] && fPrintErr "$PG_CLUSTER: FAILED TO MAKE TAR OF TABLESPACE ${INTB}"
@@ -574,3 +588,35 @@ function fExecuteExit
 }
 
 # -----------------------------------------
+
+function fversionCompare
+{
+    if [[ $1 == $2 ]]
+    then
+        return 0
+    fi
+    local IFS=.
+    local i ver1=($1) ver2=($2)
+    # fill empty fields in ver1 with zeros
+    for ((i=${#ver1[@]}; i<${#ver2[@]}; i++))
+    do
+        ver1[i]=0
+    done
+    for ((i=0; i<${#ver1[@]}; i++))
+    do
+        if [[ -z ${ver2[i]} ]]
+        then
+            # fill empty fields in ver2 with zeros
+            ver2[i]=0
+        fi
+        if ((10#${ver1[i]} > 10#${ver2[i]}))
+        then
+            return 1
+        fi
+        if ((10#${ver1[i]} < 10#${ver2[i]}))
+        then
+            return 2
+        fi
+    done
+    return 0
+}
