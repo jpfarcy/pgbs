@@ -449,6 +449,7 @@ function fBackupList
 {
 	FILE_EXP=( $(ls -1rt $PG_EXPORT 2>/dev/null) )
 	FILE_TAR=( $(ls -1rt $PG_TAR_OUT 2>/dev/null) )
+	FILE_CONF=( $(ls -1rt $BACKUPS_DIR_CONF 2>/dev/null) )
 	echo "+- ${BACKUP_DIR}"
 	echo "|- $PG_CLUSTER" 
 	if [[ -d $PG_EXPORT ]]; then
@@ -461,13 +462,22 @@ function fBackupList
 		echo "  | \`- ${FILE_EXP[$COUNTER]}"
 	fi
 	if [[ -d $PG_TAR_OUT ]]; then
-		echo "  \`- tar"
+		echo "  |- tar"
 		TARCOUNT=0
 		while [  $TARCOUNT -lt $((${#FILE_TAR[*]} - 1)) ]; do
-			echo "    |- ${FILE_TAR[$TARCOUNT]}" 
+			echo "  | |- ${FILE_TAR[$TARCOUNT]}" 
 			let TARCOUNT=TARCOUNT+1 
 		done
-		echo "    \`- ${FILE_TAR[$TARCOUNT]}"
+		echo "  | \`- ${FILE_TAR[$TARCOUNT]}"
+	fi
+	if [[ -d $BACKUPS_DIR_CONF ]]; then
+		echo "  \`- conf"
+		CONFCOUNT=0
+		while [  $CONFCOUNT -lt $((${#FILE_CONF[*]} - 1)) ]; do
+			echo "    |- ${FILE_CONF[$CONFCOUNT]}" 
+			let CONFCOUNT=CONFCOUNT+1 
+		done
+		echo "    \`- ${FILE_CONF[$CONFCOUNT]}"
 	fi
 }
 
