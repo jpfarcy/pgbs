@@ -206,7 +206,7 @@ function fTestPgConn
 		if [[ $CONFIGTEST -eq 1 ]]; then
 			 PG_CONN="OK"
 		 else
-			CMD_PSQL="$PG_PATH/psql -h $PG_SOCKDIR -p $PG_PORT -U $PG_USER -d postgres "
+			CMD_PSQL="$PG_PATH/psql -h $PG_SOCKDIR -p $PG_PORT -U $PG_USER"
 			CMD_PG_DUMP="$PG_PATH/pg_dump -h $PG_SOCKDIR -p $PG_PORT -U $PG_USER"
 			CMD_PG_DUMPALL="$PG_PATH/pg_dumpall -h $PG_SOCKDIR -p $PG_PORT -U $PG_USER"
 		fi
@@ -365,6 +365,7 @@ function fTarCluster
 			fversionCompare $VER $PGVER
 			if [[ $? != '>' ]]
     		then
+    		    # SELECT spcname, oid, pg_tablespace_location(oid) AS spclocation FROM pg_tablespace WHERE pg_tablespace_location(oid) != ''
     		    OID=`echo "SELECT oid from pg_tablespace WHERE spcname = '${S_TB}';" \
 				| $CMD_PSQL --pset tuples_only \
 					| perl -p -e 's/\n//'`
