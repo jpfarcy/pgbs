@@ -195,7 +195,7 @@ function fConfigTest
 # --- Test Postgresql Connection
 function fTestPgConn
 {
-	echo "\q" | $PG_PATH/psql -h $PG_SOCKDIR -p $PG_PORT -U $PG_USER > /dev/null 2>&1
+	echo "\q" | $PG_PATH/psql -h $PG_SOCKDIR -p $PG_PORT -U $PG_USER -d postgres > /dev/null 2>&1
 	if [[ $? -ne 0 ]]; then
 		if [[ $CONFIGTEST -eq 1 ]]; then
 			 PG_CONN="KO"
@@ -206,7 +206,7 @@ function fTestPgConn
 		if [[ $CONFIGTEST -eq 1 ]]; then
 			 PG_CONN="OK"
 		 else
-			CMD_PSQL="$PG_PATH/psql -h $PG_SOCKDIR -p $PG_PORT -U $PG_USER"
+			CMD_PSQL="$PG_PATH/psql -h $PG_SOCKDIR -p $PG_PORT -U $PG_USER -d postgres "
 			CMD_PG_DUMP="$PG_PATH/pg_dump -h $PG_SOCKDIR -p $PG_PORT -U $PG_USER"
 			CMD_PG_DUMPALL="$PG_PATH/pg_dumpall -h $PG_SOCKDIR -p $PG_PORT -U $PG_USER"
 		fi
