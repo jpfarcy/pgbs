@@ -124,6 +124,11 @@ if [[ $BACKUPS_TYPE_TAR == "yes" ]]; then
 	fTarCluster
 fi
 
+# Purge des archivelogs
+if [[ $ARCHIVELOGS_PURGE == "yes" ]]; then
+	fArchivelogsRotate
+fi
+
 # Traitement du cluster
 if [ $PG_VACUUM == "yes" -o $PG_REINDEX == "yes" ]; then
 	fPgTrt

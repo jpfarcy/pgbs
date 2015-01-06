@@ -115,6 +115,12 @@ function fInitVar
 		: ${BACKUPS_RETENTION_TAR:=7}
 		
 	fi
+
+	# --- Archivelogs
+	: ${ARCHIVELOGS_PURGE:=yes}
+	if [[ $ARCHIVELOGS_PURGE == "yes" ]]; then
+		: ${ARCHIVELOGS_RETENTION_CONF:=7}
+	fi	
 	
 	# --- conf
 	: ${BACKUPS_TYPE_CONF:=yes}
@@ -428,6 +434,14 @@ function fPgTrt
 		[[ $? -ne 0 ]] && fPrintErr "$PG_CLUSTER: LE REINDEXDB A ECHOUE."
 	fi
 }
+
+# --- Purge archivelogs
+function fArchivelogsRotate
+{
+	${ARCHIVELOGS_DIR:=$BACKUP_DIR/$PG_CLUSTER/archiveslogs}
+	find $ARCHIVELOGS_DIR -type f -name "*.gz" -mtime +${ARCHIVELOGS_RETENTION_CONF} -exec rm {} \;
+	fPrintOk "INFO : ${PG_CLUSTER}: PURGE ARCHIVELOGS IS DONE !"
+}	
 
 # --- Rotate backups
 function fBackupRotate
